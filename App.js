@@ -16,7 +16,6 @@ const App = () => {
   const fetchAnalysis = async (userAnswers) => {
     setIsLoading(true);
     const prompt = `너는 뇌과학 기반 심리 분석가야. 유저가 자존감 테스트에 [${userAnswers.join(", ")}]라고 답했어. 이 답변을 뇌과학 관점에서 분석해줘. 3문장 이내로 따뜻하게 위로하고, 결제 후 더 깊은 'Mind Check' 처방이 가능하다는 점을 언급해줘.`;
-
     try {
       const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`, {
         method: "POST",
@@ -34,9 +33,9 @@ const App = () => {
   const handlePayment = async () => {
     try {
       await toss.pay({
-        amount: 4900,
+        amount: 1900, // 가격을 1,900원으로 수정했습니다.
         orderId: `mind_check_${Date.now()}`,
-        orderName: '마음 진단서: 정밀 뇌과학 처방전',
+        orderName: '마음 진단서: 심층 상담 및 솔루션',
       });
       setStep(5);
     } catch (e) {
@@ -62,7 +61,6 @@ const App = () => {
               <FixedBottomButton label="무료 진단 시작하기" onClick={() => setStep(1)} />
             </Box>
           )}
-
           {step >= 1 && step <= 3 && (
             <Box>
               <Typography.H3>{questions[step-1].title}</Typography.H3>
@@ -81,7 +79,6 @@ const App = () => {
               </List>
             </Box>
           )}
-
           {step === 4 && (
             <Box>
               <Typography.H3>나의 뇌 분석 결과</Typography.H3>
@@ -89,10 +86,11 @@ const App = () => {
               <Box background="blue50" padding={20} borderRadius={16}>
                 {isLoading ? <Text>정밀 분석 중...</Text> : <Text>{analysis}</Text>}
               </Box>
-              <FixedBottomButton label="4,900원에 전문 처방전 받기" onClick={handlePayment} />
+              <Spacing size={24} />
+              <Typography.P color="grey600">더 깊은 변화를 위해 1:1 심층 상담을 시작해보세요.</Typography.P>
+              <FixedBottomButton label="맞춤 솔루션 시작하기" onClick={handlePayment} />
             </Box>
           )}
-
           {step === 5 && (
             <Box>
               <Typography.H3>Mind Check 심층 상담</Typography.H3>

@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>마음 진단서</title>
+    <title>마음 진단서 (Mind Check)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://static.toss.im/ait/sdk/v2/index.js"></script>
 </head>
-<body class="bg-white min-h-screen">
-    <div id="app" class="p-6 max-w-md mx-auto w-full min-h-screen flex flex-col">
-        <div id="display-area" class="flex-1 flex flex-col justify-center">
+<body class="bg-slate-50 min-h-screen font-sans">
+    <div id="app" class="p-6 max-w-md mx-auto w-full min-h-screen flex flex-col justify-center">
+        <div id="display-area" class="bg-white rounded-3xl shadow-xl p-8 transition-all duration-500">
             <div id="step-start" class="text-center">
+                <div class="inline-block p-4 bg-blue-100 rounded-2xl mb-6 text-2xl">🔍</div>
                 <h1 class="text-3xl font-extrabold text-slate-900 mb-2">마음 진단서</h1>
-                <p class="text-slate-500 mb-10">뇌과학 기반 자존감 정밀 검사</p>
-                <button onclick="startTest()" class="w-full bg-[#3182f6] text-white py-4 rounded-2xl font-bold text-lg shadow-lg">무료 진단 시작하기</button>
+                <p class="text-slate-500 mb-10 leading-relaxed">20개 정밀 문항을 통해 분석하는<br>나의 뇌과학적 자존감 상태</p>
+                <button onclick="startTest()" class="w-full bg-[#3182f6] text-white py-4 rounded-2xl font-bold text-lg shadow-lg active:scale-95 transition">무료 진단 시작하기</button>
             </div>
         </div>
     </div>
@@ -22,8 +23,8 @@
         const allQuestions = [
             { q: "작은 실수에도 '나는 왜 이럴까'하며 자책하시나요?", a: ["매우 자주", "가끔요", "안 그래요"] },
             { q: "남의 눈치를 보느라 내 의견을 숨길 때가 많나요?", a: ["항상 그래요", "종종요", "솔직한 편이에요"] },
-            { q: "과거의 잘못이 자꾸 떠올라 괴로울 때가 있나요?", a: ["매우 자주요", "종종요", "금방 잊어요"] },
-            { q: "실패했을 때 '역시 난 안 돼'라고 단정 짓나요?", a: ["항상 그래요", "종종요", "다시 시도해요"] }
+            { q: "거울 속 내 모습이 마음에 들지 않아 속상한가요?", a: ["자주 그래요", "가끔요", "만족해요"] },
+            { q: "남보다 뒤처지는 느낌에 밤잠을 설치나요?", a: ["자주 그래요", "가끔요", "안 그래요"] }
         ];
 
         let selectedQuestions = [];
@@ -37,16 +38,19 @@
 
         function showQuestion() {
             const data = selectedQuestions[currentIdx];
-            const html = `
-                <div class="animate-in fade-in duration-500">
-                    <div class="text-[#3182f6] font-bold text-sm mb-2">질문 ${currentIdx + 1}/3</div>
-                    <h2 class="text-2xl font-bold mb-8 text-slate-800 leading-snug">${data.q}</h2>
-                    <div class="space-y-3">
-                        ${data.a.map(ans => `<button onclick="nextStep()" class="w-full p-5 bg-slate-50 rounded-2xl text-left font-semibold text-slate-700 active:bg-slate-100">${ans}</button>`).join('')}
+            const progress = ((currentIdx + 1) / 3) * 100;
+            document.getElementById('display-area').innerHTML = `
+                <div class="animate-in fade-in slide-in-from-right duration-500">
+                    <div class="w-full bg-slate-100 h-1.5 rounded-full mb-8 overflow-hidden">
+                        <div class="bg-[#3182f6] h-full transition-all duration-500" style="width: ${progress}%"></div>
+                    </div>
+                    <div class="text-[#3182f6] font-bold text-xs mb-2 tracking-widest uppercase">MIND ANALYSIS ${currentIdx + 1}/3</div>
+                    <h2 class="text-2xl font-bold mb-8 text-slate-800 leading-tight">${data.q}</h2>
+                    <div class="space-y-4">
+                        ${data.a.map(ans => `<button onclick="nextStep()" class="w-full p-5 bg-slate-50 rounded-2xl text-left font-semibold text-slate-700 hover:bg-blue-50 hover:border-[#3182f6] border-2 border-transparent transition shadow-sm">${ans}</button>`).join('')}
                     </div>
                 </div>
             `;
-            document.getElementById('display-area').innerHTML = html;
         }
 
         function nextStep() {
@@ -56,36 +60,42 @@
         }
 
         function showResult() {
-            // 마케터의 전략: 텍스트 양을 늘려 가치를 증명함 (약 15줄 분량)
-            const html = `
+            // 결제 유도용 풍성한 분석 리포트
+            document.getElementById('display-area').innerHTML = `
                 <div class="animate-in zoom-in duration-300">
-                    <h2 class="text-2xl font-bold mb-6 text-slate-900">정밀 진단 리포트</h2>
-                    <div class="bg-blue-50 p-6 rounded-2xl mb-8 border border-blue-100 text-left overflow-y-auto max-h-[400px]">
-                        <p class="text-[#3182f6] font-bold mb-3">● 뇌과학적 관점의 현재 상태</p>
-                        <p class="text-slate-700 text-sm leading-relaxed mb-4">
-                            당신의 답변을 종합 분석한 결과, 현재 뇌의 <strong>'편도체(Amygdala)'</strong>가 과도하게 활성화되어 있습니다. 이는 심리적 위협을 느낄 때 나타나는 자연스러운 방어 기제이지만, 지속될 경우 이성적 사고를 담당하는 <strong>'전두엽'</strong>의 기능을 일시적으로 저하시킵니다.
+                    <div class="flex items-center gap-2 mb-6">
+                        <div class="w-1.5 h-6 bg-[#3182f6] rounded-full"></div>
+                        <h2 class="text-2xl font-bold text-slate-900 font-bold">정밀 진단 분석지</h2>
+                    </div>
+                    
+                    <div class="bg-slate-50 p-6 rounded-2xl mb-8 border border-slate-100 max-h-80 overflow-y-auto custom-scrollbar">
+                        <p class="text-[#3182f6] font-bold text-sm mb-3">● 뇌과학적 관점의 현재 상태</p>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                            당신의 답변을 종합 분석한 결과, 현재 뇌의 <strong>'편도체(Amygdala)'</strong>가 과도하게 활성화되어 있습니다. 이는 심리적 위협을 느낄 때 나타나는 자연스러운 방어 기제이지만, 지속될 경우 이성적 사고를 담당하는 <strong>'전두엽'</strong>의 기능을 일시적으로 저하시켜 무기력함을 유발할 수 있습니다.
                         </p>
-                        <p class="text-[#3182f6] font-bold mb-3">● 심리학적 분석 결과</p>
-                        <p class="text-slate-700 text-sm leading-relaxed mb-4">
-                            당신은 타인의 시선보다 '내면의 엄격한 잣대'로 인해 스스로를 소모하고 있을 가능성이 큽니다. 이러한 <strong>'완벽주의적 자책'</strong>은 도파민 회로의 보상 체계를 무너뜨려, 작은 성취에도 기쁨을 느끼지 못하게 방해하고 있습니다.
+                        
+                        <p class="text-[#3182f6] font-bold text-sm mb-3">● 심리학적 내면 분석</p>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                            당신은 타인의 시선보다 '내면의 엄격한 잣대'로 인해 스스로를 소모하고 있을 가능성이 큽니다. 이러한 <strong>'완벽주의적 자책'</strong>은 도파민 회로의 보상 체계를 무너뜨려 작은 성취에도 기쁨을 느끼지 못하게 방해하는 요소가 됩니다.
                         </p>
-                        <p class="text-[#3182f6] font-bold mb-3">● 향후 예상되는 흐름</p>
-                        <p class="text-slate-700 text-sm leading-relaxed">
-                            현재 상태를 방치할 경우 뇌는 에너지를 보존하기 위해 '무기력'이라는 보호막을 칠 수 있습니다. 지금 가장 필요한 것은 뇌 회로의 <strong>'리셋'</strong>입니다. 당신의 잘못이 아닙니다. 이것은 호르몬과 신경전달물질의 불균형일 뿐이며, 충분히 회복 가능합니다.
+
+                        <p class="text-[#3182f6] font-bold text-sm mb-3">● 긴급 처방 가이드</p>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            현재 당신에게 가장 필요한 것은 뇌 회로의 <strong>'리셋'</strong>입니다. 당신의 잘못이 아닙니다. 이것은 호르몬과 신경전달물질의 일시적 불균형일 뿐이며, 체계적인 심리 처방을 통해 충분히 회복 가능합니다.
                         </p>
                     </div>
-                    <button onclick="requestPayment()" class="w-full bg-[#3182f6] text-white py-4 rounded-2xl font-bold text-lg mb-4">나만을 위한 1:1 처방전 받기</button>
-                    <p class="text-slate-400 text-xs text-center mb-6">결제 시 전문가 수준의 심층 가이드와 추가 상담이 제공됩니다.</p>
+
+                    <button onclick="requestPayment()" class="w-full bg-[#3182f6] text-white py-4 rounded-2xl font-bold text-lg mb-4 shadow-lg active:scale-95 transition">나만을 위한 심층 처방전 받기</button>
+                    <p class="text-slate-400 text-[11px] text-center px-4 leading-relaxed">결제 시 전문가 수준의 리포트와 Gemini AI 1:1 상담 3회가 즉시 제공됩니다.</p>
                 </div>
             `;
-            document.getElementById('display-area').innerHTML = html;
         }
 
         async function requestPayment() {
             const isToss = /Toss/i.test(navigator.userAgent);
             if (!isToss) {
-                alert("웹 미리보기: 결제 성공 시나리오로 이동합니다.");
-                showConsultingStart();
+                alert("웹 미리보기 모드입니다. 결제 성공 화면으로 이동합니다.");
+                showFinalStep();
                 return;
             }
             try {
@@ -94,18 +104,18 @@
                     orderId: "order_" + Math.random().toString(36).substring(2, 11),
                     orderName: "마음 진단서 심층 처방전",
                 });
-                if (result) showConsultingStart();
+                if (result) showFinalStep();
             } catch (error) {
                 alert("결제가 완료되지 않았습니다.");
             }
         }
 
-        function showConsultingStart() {
+        function showFinalStep() {
             document.getElementById('display-area').innerHTML = `
                 <div class="text-center animate-in slide-in-from-bottom duration-500">
-                    <div class="inline-block p-4 bg-green-100 rounded-full mb-6">✨</div>
-                    <h2 class="text-2xl font-bold mb-4">맞춤 처방 활성화</h2>
-                    <p class="text-slate-600 mb-10 leading-relaxed">
+                    <div class="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6 text-3xl">✨</div>
+                    <h2 class="text-2xl font-bold mb-4 text-slate-900">맞춤 처방 활성화</h2>
+                    <p class="text-slate-600 mb-10 leading-relaxed text-sm">
                         결제가 확인되었습니다. 이제 당신의 뇌 회로를 회복시킬 <strong>Gemini AI</strong>의 첫 번째 질문을 기다려주세요.
                     </p>
                     <button onclick="alert('곧 상담 기능이 연결됩니다!')" class="w-full bg-[#3182f6] text-white py-4 rounded-2xl font-bold text-lg shadow-lg">상담 시작하기</button>
@@ -113,5 +123,10 @@
             `;
         }
     </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
 </body>
 </html>

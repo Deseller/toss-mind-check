@@ -3,25 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>마음 진단서 미리보기</title>
+    <title>마음 진단서</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 min-h-screen flex items-center justify-center p-6">
-    <div class="bg-white w-full max-w-md rounded-3xl shadow-xl overflow-hidden p-8">
-        <h1 class="text-3xl font-extrabold text-slate-900 mb-2">마음 진단서</h1>
-        <p class="text-slate-500 mb-8 font-medium">뇌과학으로 당신의 자존감을 체크합니다.</p>
-        
-        <div id="content" class="space-y-6">
-            <div class="bg-blue-50 p-6 rounded-2xl">
-                <p class="text-blue-700 leading-relaxed">
-                    여기는 테스트 화면입니다. <br>
-                    실제 토스 앱에 올리기 전 디자인을 확인하세요!
-                </p>
+    <div id="app" class="bg-white w-full max-w-md rounded-3xl shadow-xl p-8">
+        <div id="step-0">
+            <h1 class="text-3xl font-extrabold text-slate-900 mb-2">마음 진단서</h1>
+            <p class="text-slate-500 mb-8">뇌과학으로 당신의 자존감을 체크합니다.</p>
+            <button onclick="nextStep(1)" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold text-lg shadow-lg">무료 진단 시작하기</button>
+        </div>
+
+        <div id="step-1" class="hidden">
+            <h2 class="text-xl font-bold mb-4">1. 자책의 빈도</h2>
+            <p class="text-slate-600 mb-6">실수를 했을 때 자신을 얼마나 자책하시나요?</p>
+            <div class="space-y-3">
+                <button onclick="nextStep(2)" class="w-full p-4 border-2 rounded-xl hover:bg-blue-50">매우 자주</button>
+                <button onclick="nextStep(2)" class="w-full p-4 border-2 rounded-xl hover:bg-blue-50">가끔</button>
+                <button onclick="nextStep(2)" class="w-full p-4 border-2 rounded-xl hover:bg-blue-50">거의 안 함</button>
             </div>
-            <button onclick="alert('결제창이 뜹니다 (1,900원)')" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold text-lg shadow-lg hover:bg-blue-700 transition">
-                무료 진단 시작하기
-            </button>
+        </div>
+
+        <div id="step-2" class="hidden">
+            <h2 class="text-xl font-bold mb-4">분석 완료</h2>
+            <div class="bg-blue-50 p-6 rounded-2xl mb-6">
+                <p class="text-blue-700">"당신의 뇌는 현재 일시적인 과부하 상태입니다."</p>
+            </div>
+            <p class="text-slate-600 mb-8 text-sm">전문적인 처방과 1:1 심층 상담을 이어가시겠어요?</p>
+            <button onclick="alert('토스 결제창이 실행됩니다 (1,900원)')" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold">맞춤 솔루션 시작하기 (1,900원)</button>
         </div>
     </div>
+
+    <script>
+        function nextStep(step) {
+            document.querySelectorAll('#app > div').forEach(div => div.classList.add('hidden'));
+            document.getElementById('step-' + step).classList.remove('hidden');
+        }
+    </script>
 </body>
 </html>
